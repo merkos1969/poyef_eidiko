@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ειδικό Μισθολόγιο – ΠΟΥΕΦ (v82 core)</title>
+  <style>
+    :root{
+      --blue:#1e63d5;
+      --blue2:#0f3f91;
+      --bg:#f4f6fb;
+      --card:#ffffff;
+      --text:#10203a;
+      --muted:#5b6b85;
+      --ok:#16b84e;
+      --border: rgba(16,32,58,.12);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      padding:16px;
+    }
+    .wrap{max-width:980px;margin:0 auto}
+    .topbar{
+      display:flex;gap:10px;align-items:center;justify-content:space-between;
+      margin-bottom:12px;
+    }
+    h1{
+      font-size:18px;line-height:1.15;margin:0;
+      color:var(--blue2);
+      letter-spacing:.2px;
+    }
+    .pillrow{display:flex;gap:10px}
+    .btn{
+      border:0;border-radius:14px;
+      padding:12px 14px;
+      background:var(--blue);
+      color:#fff;
+      font-weight:800;
+      cursor:pointer;
+      box-shadow: 0 6px 18px rgba(30,99,213,.18);
+    }
+    .btn:active{transform:translateY(1px)}
+    .btn.secondary{background:var(--blue2)}
+    .btn.ghost{
+      background:#fff;color:var(--blue2);
+      border:1px solid var(--border);
+      box-shadow:none;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:12px;
+    }
+    @media(min-width:920px){
+      .grid{grid-template-columns: 1.15fr .85fr;}
+    }
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:14px;
+      box-shadow: 0 8px 24px rgba(16,32,58,.06);
+    }
+    .card h2{
+      font-size:14px;margin:0 0 10px 0;color:var(--blue2);
+      letter-spacing:.2px;
+    }
+    .row{display:grid;grid-template-columns:1fr;gap:10px}
+    @media(min-width:560px){ .row{grid-template-columns: 1fr 1fr;} }
+    label{display:block;font-size:12px;color:var(--muted);margin:0 0 6px}
+    input, select{
+      width:100%;
+      padding:11px 12px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      font-size:14px;
+      outline:none;
+      background:#fff;
+      color:var(--text);
+    }
+    input:focus, select:focus{border-color: rgba(30,99,213,.55); box-shadow:0 0 0 4px rgba(30,99,213,.10)}
+    .check{
+      display:flex;gap:10px;align-items:center;
+      padding:10px 12px;border-radius:12px;border:1px solid var(--border);
+      background:#fff;
+    }
+    .check input{width:auto}
+    .tabs{display:flex;gap:10px;margin:10px 0 0}
+    .tab{
+      flex:1;border:0;border-radius:12px;padding:12px 10px;
+      background:var(--blue);color:#fff;font-weight:900;cursor:pointer;
+    }
+    .tab.active{background:var(--blue2)}
+    .tab:active{transform:translateY(1px)}
+    .panel{margin-top:12px}
+    .line{display:flex;justify-content:space-between;gap:10px;margin:8px 0}
+    .line span:first-child{color:var(--muted)}
+    .big{
+      font-size:22px;font-weight:1000;color:var(--ok);
+      letter-spacing:.2px;
+    }
+    .smallnote{font-size:12px;color:var(--muted);margin-top:8px}
+    .hr{height:1px;background:var(--border);margin:10px 0}
+    .footerBtns{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .badge{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:6px 10px;border-radius:999px;
+      background:rgba(30,99,213,.10); color:var(--blue2);
+      font-size:12px;font-weight:800;
+      border:1px solid rgba(30,99,213,.20);
+    }
+    @media print{
+      body{background:#fff;padding:0}
+      .topbar .pillrow, .footerBtns, .tabs{display:none !important}
+      .card{box-shadow:none;border:1px solid #ddd}
+      .wrap{max-width:none}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <h1>Ειδικό Μισθολόγιο ΠΟΥΕΦ<br><span style="font-weight:700;color:#5b6b85;font-size:12px">v82 (core υπολογισμού)</span></h1>
+      <div class="pillrow">
+        <button class="btn secondary" id="btnCalc">Υπολογισμός</button>
+        <button class="btn" id="btnCalendar" title="Θα προστεθεί στο επόμενο βήμα">Ημερολόγιο (v82.2)</button>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h2>Στοιχεία</h2>
+
+        <div class="row">
+          <div>
+            <label>Έτος γέννησης</label>
+            <input id="birthYear" type="number" inputmode="numeric" placeholder="π.χ. 1985" />
+          </div>
+          <div>
+            <label>Τέκνα</label>
+            <input id="children" type="number" inputmode="numeric" min="0" value="0" />
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:10px">
+          <div>
+            <label>Βασικός μισθός (€)</label>
+            <input id="baseSalary" type="number" inputmode="decimal" value="1774" />
+          </div>
+          <div>
+            <label>Συντελεστής προσαύξησης</label>
+            <select id="coef">
+              <option value="1.00">1,00</option>
+              <option value="1.01">1,01</option>
+              <option value="1.02">1,02</option>
+              <option value="1.04" selected>1,04</option>
+              <option value="1.07">1,07</option>
+              <option value="1.08">1,08</option>
+              <option value="1.10">1,10</option>
+              <option value="1.13">1,13</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:10px">
+          <div>
+            <label>Προσωπική διαφορά (€)</label>
+            <input id="personalDiff" type="number" inputmode="decimal" value="0" />
+          </div>
+          <div>
+            <label>Οικογενειακή παροχή (€)</label>
+            <input id="familyAllowance" type="number" inputmode="decimal" value="0" />
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:10px">
+          <div>
+            <label>Επίδομα ιδιαιτέρων συνθηκών (€)</label>
+            <input id="specialAllowance" type="number" inputmode="decimal" value="0" />
+          </div>
+          <div>
+            <label>Άλλα επιδόματα (€)</label>
+            <input id="otherAllowance" type="number" inputmode="decimal" value="0" />
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:10px">
+          <div class="check">
+            <input id="borderArea" type="checkbox" />
+            <div>
+              <div style="font-weight:900;color:var(--blue2)">Παραμεθόριος</div>
+              <div style="font-size:12px;color:var(--muted)">Δεν είναι προεπιλογή</div>
+            </div>
+          </div>
+          <div class="check">
+            <input id="fiveYear" type="checkbox" />
+            <div>
+              <div style="font-weight:900;color:var(--blue2)">Αναγνώριση 5ετίας</div>
+              <div style="font-size:12px;color:var(--muted)">Δεν είναι προεπιλογή</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:10px">
+          <div>
+            <label>Νυχτερινά (πλήθος)</label>
+            <input id="nightCount" type="number" inputmode="numeric" min="0" value="0" />
+            <div class="smallnote"><span class="badge">Σταθερό</span> 26,50€ / νύχτα</div>
+          </div>
+          <div>
+            <label>Πενθήμερα (πλήθος)</label>
+            <input id="fiveDayCount" type="number" inputmode="numeric" min="0" value="0" />
+            <div class="smallnote"><span class="badge">Σταθερό</span> 46,00€ / 5ήμερο</div>
+          </div>
+        </div>
+
+        <div class="footerBtns">
+          <button class="btn ghost" id="btnReset">Καθαρισμός πεδίων</button>
+          <button class="btn" onclick="window.print()">Εκτύπωση / Αποθήκευση PDF</button>
+        </div>
+
+        <div class="smallnote">
+          v82 core = σταθερός υπολογισμός. Το ημερολόγιο (μόνο καταμέτρηση ΝΥ & 5ημέρων) θα προστεθεί στο επόμενο βήμα.
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Αποτελέσματα</h2>
+
+        <div class="tabs">
+          <button class="tab active" data-tab="earn">ΑΠΟΔΟΧΕΣ</button>
+          <button class="tab" data-tab="ded">ΚΡΑΤΗΣΕΙΣ</button>
+          <button class="tab" data-tab="tax">ΦΟΡΟΛΟΓΙΑ</button>
+        </div>
+
+        <div class="panel" id="panelEarn">
+          <div class="line"><span>Ηλικία</span><span id="ageOut">—</span></div>
+          <div class="line"><span>Βασικός × Συντ.</span><span id="baseOut">0,00 €</span></div>
+          <div class="line"><span>Νυχτερινά</span><span id="nightOut">0,00 €</span></div>
+          <div class="line"><span>Πενθήμερα</span><span id="fiveOut">0,00 €</span></div>
+          <div class="line"><span>Παραμεθόριος</span><span id="borderOut">0,00 €</span></div>
+          <div class="line"><span>5ετία</span><span id="fiveYearOut">0,00 €</span></div>
+          <div class="line"><span>Οικ. παροχή</span><span id="familyOut">0,00 €</span></div>
+          <div class="line"><span>Ιδ. συνθηκών</span><span id="specialOut">0,00 €</span></div>
+          <div class="line"><span>Άλλα</span><span id="otherOut">0,00 €</span></div>
+          <div class="line"><span>Προσωπική διαφορά</span><span id="personalOut">0,00 €</span></div>
+          <div class="hr"></div>
+          <div class="line"><span style="font-weight:900;color:var(--blue2)">Σύνολο μικτών</span><span style="font-weight:1000" id="grossOut">0,00 €</span></div>
+          <div class="line"><span style="font-weight:900;color:var(--blue2)">Πληρωτέο</span><span class="big" id="netOut">0,00 €</span></div>
+        </div>
+
+        <div class="panel" id="panelDed" style="display:none">
+          <div class="line"><span>Ασφαλιστικές κρατήσεις</span><span id="insOut">0,00 €</span></div>
+          <div class="line"><span>Λοιπές κρατήσεις</span><span id="otherDedOut">0,00 €</span></div>
+          <div class="hr"></div>
+          <div class="line"><span style="font-weight:900;color:var(--blue2)">Σύνολο κρατήσεων</span><span style="font-weight:1000" id="dedTotalOut">0,00 €</span></div>
+          <div class="smallnote">Οι συντελεστές κρατήσεων είναι παραμετρικοί στο app.js (v82 core). Μπορούν να “κουμπώσουν” ακριβώς όπως v81.</div>
+        </div>
+
+        <div class="panel" id="panelTax" style="display:none">
+          <div class="line"><span>Ετήσιο φορολογητέο</span><span id="taxableAnnualOut">0,00 €</span></div>
+          <div class="line"><span>Φόρος κλίμακας</span><span id="taxScaleOut">0,00 €</span></div>
+          <div class="line"><span>Έκπτωση φόρου (τέκνα)</span><span id="taxCreditOut">0,00 €</span></div>
+          <div class="line"><span>Μείωση (10€/1000€ άνω 12.000€)</span><span id="taxReductionOut">0,00 €</span></div>
+          <div class="hr"></div>
+          <div class="line"><span style="font-weight:900;color:var(--blue2)">Ετήσιος φόρος</span><span style="font-weight:1000" id="taxAnnualOut">0,00 €</span></div>
+          <div class="line"><span style="font-weight:900;color:var(--blue2)">Μηνιαίος φόρος</span><span style="font-weight:1000" id="taxMonthlyOut">0,00 €</span></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
