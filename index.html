@@ -1,159 +1,304 @@
-
 <!doctype html>
 <html lang="el">
 <head>
-  <link rel="stylesheet" href="styles.css?v=94calbg"> <meta charset="utf-8"/> <meta name="viewport" content="width=device-width, initial-scale=1"/> <title>ΠΟΥΕΦ – Ειδικό Μισθολόγιο</title> 
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Μισθολόγιο Εξωτερικής Φρούρησης</title>
+  <link rel="stylesheet" href="./style.css?v=38">
 </head>
 <body>
-<div class="wrap">
-<h1>ΕΙΔΙΚΟ ΜΙΣΘΟΛΟΓΙΟ ΥΠΑΛΛΗΛΩΝ ΕΞΩΤΕΡΙΚΗΣ ΦΡΟΥΡΗΣΗΣ</h1>
-<div class="tabsMain">
-  <div class="tabsMainButtons" style="display:flex; gap:10px; justify-content:center; margin:14px 0 10px; flex-wrap:wrap;">
-    <button id="tabBtnCalc" class="tabBtn tabActive" type="button">Υπολογισμός</button>
-    <button id="tabBtnCal" class="tabBtn" type="button">Ημερολόγιο Βαρδιών</button>
-  </div>
-  <div class="tabsMainSelect" style="display:none; justify-content:center; margin:10px 0 18px;">
-    <select id="mainTabSelect" aria-label="Επιλογή ενότητας" style="min-width:240px; font-weight:900;">
-      <option value="calc" selected>Υπολογισμός</option>
-      <option value="cal">Ημερολόγιο Βαρδιών</option>
-    </select>
-  </div>
-</div>
- <div id="tabCalc">
-<div class="grid"> <div class="card"> <div class="l" style="font-size:12px;">ΣΤΟΙΧΕΙΑ</div> <label>Ημερομηνία διορισμού</label> <input id="appointDate" type="date" value="2000-07-20"/> <label style="margin-top:8px; display:flex; gap:8px; align-items:center;"><input type="checkbox" id="neoMtpyEnabled"> Νεοδιόριστος (1ο έτος)</label> <div class="rows"> <div class="row"><div class="l">Έτη υπηρεσίας</div><div class="r" id="yearsOut">—</div></div> <div class="row"><div class="l">Διοικητικός βαθμός</div><div class="r" id="adminGradeOut">—</div></div> <div class="row"><div class="l">Κλιμάκιο</div><div class="r" id="klimOut">—</div></div> </div> <label>Οικογενειακή κατάσταση</label> <select id="status"> <option>Άγαμος</option> <option>Έγγαμος</option> <option>Έγγαμος με τέκνα</option> </select> <label>Αριθμός παιδιών</label> <select id="children"> <option value="0" selected>0</option> <option value="1">1</option> <option value="2">2</option> <option value="3">3</option> <option value="4">4+</option> </select> <!-- Φορολογία αφαιρέθηκε κατόπιν οδηγίας --> <label>Ασφαλισμένος (πριν/μετά το 1993)</label> <select id="after1993"> <option value="after" selected>Μετά το 1993</option> <option value="before">Πριν το 1993</option> </select> <label>Παραμεθόριος</label>
-<select id="border">
-  <option value="0">Όχι</option>
-  <option value="130">Ναι (130€)</option>
-</select> <label>Πενθήμερα (46€)</label> <input id="fiveDays" type="number" value="0" min="0" step="1"/> <label>Νυχτερινά (νύχτες × 26,5€)</label> <input id="nightHours" type="number" value="0" min="0" step="1"/> <label>Αναγνώριση 5ετίας (39,87€)</label> <div style="margin-top:6px;"> <input id="fiveRecognize" type="checkbox" style="width:auto;transform:scale(1.15);vertical-align:middle;"/> <span class="l" style="margin-left:8px;">Ενεργό</span> </div> <label>Δάνειο ΜΤΠΥ (ποσό)</label> <input id="loanMtpy" type="number" value="0" min="0" step="0.01"/>
-<label>Προσωπική Διαφορά (ποσό)</label>
-<input id="personalDiff" type="number" value="0" min="0" step="0.01"/> <div class="divider"></div> <label>Εκκαθαριστικό προς εκτύπωση</label> <div style="display:flex;gap:10px;margin-top:6px;"> <select id="payslipMonth" style="flex:1;"><option value="0">Ιανουάριος</option><option value="1">Φεβρουάριος</option><option value="2">Μάρτιος</option><option value="3">Απρίλιος</option><option value="4">Μάιος</option><option value="5">Ιούνιος</option><option value="6">Ιούλιος</option><option value="7">Αύγουστος</option><option value="8">Σεπτέμβριος</option><option value="9">Οκτώβριος</option><option value="10">Νοέμβριος</option><option value="11">Δεκέμβριος</option></select> <input id="payslipYear" type="number" value="2026" min="2000" max="2100" style="width:120px;"/> </div> <div style="margin-top:12px;"> <button class="btn" id="btnPrint" type="button">🖨 Εκτύπωση / Αποθήκευση PDF</button> </div>  </div> <div class="card"> <div class="tabs"> <div class="tab active" id="tabE">ΑΠΟΔΟΧΕΣ</div> <div class="tab" id="tabD">ΚΡΑΤΗΣΕΙΣ</div> <div class="tab" id="tabT">ΦΟΡΟΛΟΓΙΑ</div> </div> <div id="panelE" style="display:block;"> <div class="rows"> <div class="row"><div class="l">Βασικός μισθός
-<div class='row'><div class='l'>Συντελεστής προσαύξησης</div><div class='r' id='coefDisplay'>1.00</div></div>
-<div class='row'>
-  <div class='l'>Ανάλυση βασικού</div>
-  <div class='r' id='basicAnalysis'>0,00€ × 1.00 = 0,00€</div>
-</div></div><div class="r" id="oBase">—</div></div> <div class="row"><div class="l">Οικογενειακή παροχή</div><div class="r" id="oFam">—</div></div> <div class="row"><div class="l">Επίδομα ιδ. συνθηκών</div><div class="r" id="oSpecial">—</div></div> <div class="row"><div class="l">Παραμεθόριο</div><div class="r" id="oBorder">—</div></div> <div class="row"><div class="l">Πενθήμερα</div><div class="r" id="oFive">—</div></div> <div class="row"><div class="l">Νυχτερινά</div><div class="r" id="oNight">—</div></div><div class="row"><div class="l">Προσωπική Διαφορά</div><div class="r" id="oPersonalDiff">—</div></div> <div class="row"><div class="l">Σύνολο μικτών αποδοχών</div><div class="r" id="oGross">—</div></div> </div> </div> <div id="panelD" style="display:none;"> <div class="l" style="margin-top:6px;font-size:12px;">Κρατήσεις κύριων αποδοχών</div> <div class="rows"> <div class="row"><div class="l">ΕΦΚΑ σύνταξη (6,67%)</div><div class="r" id="dEfka">—</div></div> <div class="row"><div class="l">Υγειονομική (2,05%)</div><div class="r" id="dHealth">—</div></div> <div class="row"><div class="l">ΤΠΔΥ (4%)</div><div class="r" id="dTpdy">—</div></div> <div class="row"><div class="l">ΤΕΑΔΥ (3%)</div><div class="r" id="dTeady">—</div></div> <div class="row"><div class="l">Ανεργία (2%)</div><div class="r" id="dUnempMain">—</div></div> <div class="row"><div class="l">ΜΤΠΥ (4,5% / 1%)</div><div class="r" id="dMtpyMain">—</div></div> <div class="row"><div class="l">ΜΤΠΥ Νεοδιόριστου (1/12 βασικού, 1ο έτος)</div><div class="r" id="dMtpyNeo">—</div></div> <div class="row"><div class="l">Αναγνώριση 5ετίας</div><div class="r" id="d5y">—</div></div> <div class="row"><div class="l">ΠΟΥΕΦ</div><div class="r" id="dPouef">—</div></div> <div class="row"><div class="l">Δάνειο ΜΤΠΥ</div><div class="r" id="dLoan">—</div></div> <div class="row"><div class="l"><div class="row"><div class="l">Μηνιαίος φόρος</div><div class="r" id="dTax">0,00€</div></div>
-Σύνολο κρατήσεων κύριων</div><div class="r" id="dMainTotal">—</div></div> </div> <div class="l" style="margin-top:10px;font-size:12px;">Κρατήσεις νυχτερινών & πενθημέρων</div> <div class="rows"> <div class="row"><div class="l">Ανεργία 2% (Νύχτες + Πενθήμερα)</div><div class="r" id="dUnempExtra">—</div></div> <div class="row"><div class="l">ΜΤΠΥ 2% (Νύχτες + Πενθήμερα)</div><div class="r" id="dMtpyExtra">—</div></div> <div class="row"><div class="l">Φόρος 20% (Νύχτες + Πενθήμερα)</div><div class="r" id="dTaxExtra">—</div></div> <div class="row"><div class="l">Σύνολο κρατήσεων νυχτερινών & πενθημέρων</div><div class="r" id="dExtraTotal">—</div></div> <div class="row"><div class="l">Σύνολο κρατήσεων</div><div class="r" id="dTotal">—</div></div> </div> </div> <div class="divider"></div> <div class="row" style="border-bottom:0;"> <div class="l" style="font-size:13px;">Πληρωτέο ποσό (μήνας)</div> <div class="bigGreen" id="netOut">—</div> </div> <div class="row" style="border-bottom:0;"> <div class="l" style="font-size:13px;">Πληρωτέο ποσό (15ήμερο)</div> <div class="r" style="font-size:22px;color:var(--green);" id="net15Out">—</div> </div> <div class="note"> ΜΤΠΥ = Βασικός × 4,5% + (Οικογενειακή παροχή + Επίδομα ιδ. συνθηκών + Παραμεθορίου) × 4,5% (μετά το 1993) ή 1% (πριν το 1993).<br/> Επιπλέον για Νύχτες/Πενθήμερα: 2% υπέρ ανεργίας + 2% ΜΤΠΥ + 20% φόρος. </div> </div> </div> 
-    <div id="panelT" style="display:none;">
-      <div class="card">
-        <div style="font-weight:900;margin-bottom:10px;">Φορολογία (ενημερωτικά)</div>
-        <label>Ηλικιακή κατηγορία</label>
-        <select id="taxAge">
-          <option value="over30" selected>Άνω των 30</option>
-          <option value="26to30">26–30</option>
-          <option value="upto25">Έως 25</option>
-        </select>
-        <label>Τέκνα (t)</label>
-        <select id="taxKids">
-          <option value="0" selected>0</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4+</option>
-        </select>
-        <div class="rows" style="margin-top:12px;">
-          <div class="row"><div class="l">Ετήσιο φορολογητέο εισόδημα</div><div class="r" id="taxAnnualIncome">0,00€</div></div>
-          <div class="row"><div class="l">Ετήσιος φόρος (κλίμακα)</div><div class="r" id="taxAnnual">0,00€</div></div>
-          <div class="row"><div class="l">Μηνιαίος φόρος (ενδεικτικά)</div><div class="r" id="taxMonthly">0,00€</div></div>
-<label style="margin-top:10px; display:block;"><input type="checkbox" id="applyTax"> Αφαίρεση μηνιαίου φόρου από το πληρωτέο</label>
-        </div>
-        <div class="note" style="margin-top:10px;">
-          Υπολογισμός με βάση: (Μεικτά - κρατήσεις) × 12 και τους αντίστοιχους συντελεστές ανά ηλικία/τέκνα.
+  <div class="page">
+    <header class="topbar">
+      <div class="brand">
+        
+        <div>
+          <div class="brandTitle">Υπολογιστής Μισθοδοσίας</div>
+          <div class="brandSub">Εξωτερικής Φρούρησης – Ειδικό Μισθολόγιο (ΚΑΤ Γ')</div>
         </div>
       </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="printBtn" type="button" onclick="window.print()">Εκκαθαριστικό / PDF</button><button class="printBtn" id="resetStorageBtn" type="button">Μηδενισμός αποθήκευσης</button></div>
+    </header>
+
+    <section class="panel panel-top">
+      <h2>Στοιχεία</h2>
+      <div class="grid2">
+        <div class="field">
+          <label>Ασφάλιση</label>
+          <select id="insurance">
+            <option value="pre93">Πριν από 01/01/1993</option>
+            <option value="post93" selected>Μετά από 01/01/1993</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Οικογενειακή κατάσταση</label>
+          <select id="family">
+            <option value="single" selected>Άγαμος</option>
+            <option value="married">Έγγαμος</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Τέκνα</label>
+          <select id="kids">
+            <option value="0" selected>0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5+</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Ημερομηνία Υπολογισμού</label>
+          <input id="calcDate" type="date">
+        </div>
+        <div class="field">
+          <label>Ημ/νία Διορισμού</label>
+          <input id="hireDate" type="date" value="2000-07-20">
+        </div>
+        <div class="field">
+          <label>Έτη υπηρεσίας</label>
+          <input id="years" type="text" readonly value="-">
+        </div>
+        <div class="field">
+          <label>Κλιμάκιο</label>
+          <input id="step" type="text" readonly value="-">
+        </div>
+        <div class="field">
+          <label>Εύρος ετών κλιμακίου</label>
+          <input id="rangeLabel" type="text" readonly value="-">
+        </div>
+        <div class="field">
+          <label>Ετήσιο φορολογητέο</label>
+          <input id="annualTaxable" type="text" readonly value="0,00">
+        </div>
+        <div class="field">
+          <label>Έκπτωση φόρου</label>
+          <input id="taxCreditOut" type="text" readonly value="0,00">
+        </div>
+      </div>
+    </section>
+
+    <div class="cols">
+      <section class="panel panel-pay">
+        <h2>Αποδοχές</h2>
+        <div class="line"><span>Βασικός μισθός</span><b><span id="basePay">0,00</span> €</b></div>
+        <div class="line"><span>Επίδομα ιδιαίτερων καθηκόντων</span><b><span id="dutyPay">0,00</span> €</b></div>
+        <div class="line"><span>Επίδομα τέκνων</span><b><span id="childPay">0,00</span> €</b></div>
+
+        <div class="grid2">
+          <div class="field">
+            <label>Παραμεθόριος</label>
+            <select id="borderYes">
+              <option value="no" selected>ΟΧΙ</option>
+              <option value="yes">ΝΑΙ</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Προσωπική διαφορά</label>
+            <input id="personalDiff" type="number" step="0.01" placeholder="€">
+          </div>
+        </div>
+
+        <div class="grid2">
+          <div class="field">
+            <label>Πενθήμερα / μήνα</label>
+            <input id="fiveDaysCount" type="number" step="1" value="0">
+          </div>
+          <div class="field">
+            <label>Τιμή πενθημέρου (€)</label>
+            <input id="fiveDaysRate" type="number" step="0.01" value="46">
+          </div>
+        </div>
+        <div class="miniCalc">
+          Μικτό: <b><span id="fiveGross">0,00</span> €</b><br>
+          Κρατήσεις: <b><span id="fiveDed">0,00</span> €</b><br>
+          Φόρος 20%: <b><span id="fiveTax">0,00</span> €</b><br>
+          Καθαρό: <b><span id="fiveNet">0,00</span> €</b>
+        </div>
+
+        <div class="grid2">
+          <div class="field">
+            <label>Νυχτερινά / μήνα</label>
+            <input id="nightCount" type="number" step="1" value="0">
+          </div>
+          <div class="field">
+            <label>Τιμή νύχτας (€)</label>
+            <input id="nightRate" type="number" step="0.01" value="26.5">
+          </div>
+        </div>
+        <div class="miniCalc">
+          Μικτό: <b><span id="nightGross">0,00</span> €</b><br>
+          Κρατήσεις: <b><span id="nightDed">0,00</span> €</b><br>
+          Φόρος 20%: <b><span id="nightTax">0,00</span> €</b><br>
+          Καθαρό: <b><span id="nightNet">0,00</span> €</b>
+        </div>
+
+        <div class="total total-green">
+          <span>ΣΥΝΟΛΟ ΑΠΟΔΟΧΩΝ</span>
+          <b><span id="grossTotal">0,00</span> €</b>
+        </div>
+      </section>
+
+      
+<section class="panel panel-ded">
+  <h2>Κρατήσεις</h2>
+
+  <div class="grid2">
+    <div class="field">
+      <label>Αναγνώριση 5ετίας</label>
+      <select id="fiveYearsOn">
+        <option value="no" selected>ΟΧΙ</option>
+        <option value="yes">ΝΑΙ</option>
+      </select>
     </div>
-<footer>
-  <div style="display:flex;flex-direction:column;gap:10px;align-items:center;text-align:center;">
-    <div style="display:flex;flex-direction:column;gap:6px;">
-      <a href="https://poyef.gr" target="_blank" rel="noopener">poyef.gr</a>
-      <a href="nomothetimata.pdf" target="_blank" rel="noopener">Νομοθετήματα Εξωτερικής Φρούρησης</a>
+    <div class="field">
+      <label>Ποσό 5ετίας (€)</label>
+      <input id="fiveYearsAmount" type="number" step="0.01" value="39.87">
     </div>
-    <div>
-      Κατασκευή Κερμανίδης Μερκούριος<br/>
-      Επικοινωνία: <a class="mailto" href="mailto:merkos1969@gmail.com">merkos1969@gmail.com</a>
+    <div class="field">
+      <label>Λοιπές κρατήσεις (€)</label>
+      <input id="otherFixed" type="number" step="0.01" value="0">
     </div>
-    <div class="card guideCard" style="max-width:900px;width:100%;margin-top:6px;">
-      <div style="font-weight:900;margin-bottom:6px;">Οδηγίες χρήσης της εφαρμογής</div>
-<div id="usageGuideContent" style="padding:12px; color:#111827; font-weight:700; line-height:1.5;"><ol style="margin:0; padding-left:18px;"><li>Συμπλήρωσε τα στοιχεία σου (ημερομηνία διορισμού, βαθμό/κλιμάκιο κ.λπ.).</li><li>Για βάρδιες: άνοιξε <b>Ημερολόγιο Βαρδιών</b>, πάτα ΠΡ/ΑΠ/ΝΥ/ΑΔ/Ρ και μετά πάτα ημέρα. Ξαναπάτημα την αφαιρεί.</li><li>Διπλοβάρδια επιτρέπεται μόνο <b>ΠΡ + ΝΥ</b> (στην ίδια ημέρα).</li><li>Η αντιγραφή κύκλου 5 ή 10 ημερών γεμίζει μήνες χωρίς να αλλάζει ημέρες που ήδη έχουν βάρδια.</li><li>Πάτα <b>Εφαρμογή στο Μισθολόγιο</b> για να περάσουν Νυχτερινά/5Μ στα αντίστοιχα πεδία.</li></ol></div>
-<div style="text-align:center;opacity:.65;font-size:12px;margin:10px 0 0 0;">Επίσημη έκδοση ΠΟΥΕΦ • 23/02/2026</div>
-</footer>
- </div> 
-</div><!-- /tabCalc -->
-<div id="tabCal" style="display:none;">
-  <div class="card calendarCard" style="margin-top:0;">
-    <div class="l" style="font-size:12px;">ΗΜΕΡΟΛΟΓΙΟ ΒΑΡΔΙΩΝ</div>
-    <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:10px;">
-      <button id="calPrev" class="tabBtn" type="button" style="padding:8px 12px;">◀</button>
-      <div id="calLabel" style="font-weight:1000; font-size:18px;"></div>
-      <button id="calNext" class="tabBtn" type="button" style="padding:8px 12px;">▶</button>
+    <div class="field">
+      <label>Μηνιαίος φόρος (αυτόματος)</label>
+      <input id="taxMonthlyOut" type="text" readonly value="0,00">
     </div>
-    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; justify-content:center;">
-      <button class="shiftBtn" data-shift="PR" type="button">ΠΡ</button>
-      <button class="shiftBtn" data-shift="AP" type="button">ΑΠ</button>
-      <button class="shiftBtn" data-shift="NY" type="button">ΝΥ</button>
-      <button class="shiftBtn" data-shift="AD" type="button">ΑΔ</button>
-      <button class="shiftBtn" data-shift="RP" type="button">Ρ</button>
-</div>
-    <div style="text-align:center; margin-top:8px; font-size:12px; opacity:.8;">
+  </div>
+
+  <div class="miniCalc">
+    Βασικές κρατήσεις κύριου μισθού:<br>
+    ΤΠΔΥ 4% • ΜΤΠΥ (πριν/μετά 1993) • ΤΕΑΔΥ 3% • Υγειονομική 2,05% • ΕΦΚΑ 6,67% • Ανεργία 2%
+  </div>
+
+  <div class="line"><span>ΤΠΔΥ (4%)</span><b><span id="tpdyAmt">0,00</span> €</b></div>
+  <div class="line"><span>ΜΤΠΥ</span><b><span id="mtpyAmt">0,00</span> €</b></div>
+  <div class="line"><span>ΤΕΑΔΥ (3%)</span><b><span id="teadyAmt">0,00</span> €</b></div>
+  <div class="line"><span>Υγειονομική (2,05%)</span><b><span id="healthAmt">0,00</span> €</b></div>
+  <div class="line"><span>ΕΦΚΑ σύνταξη (6,67%)</span><b><span id="efkaAmt">0,00</span> €</b></div>
+  <div class="line"><span>Ανεργία (2%)</span><b><span id="unempAmt">0,00</span> €</b></div>
+  <div class="line"><span>Αναγνώριση 5ετίας</span><b><span id="fiveYearsDed">0,00</span> €</b></div>
+  <div class="line"><span>Λοιπές κρατήσεις</span><b><span id="otherAmt">0,00</span> €</b></div>
+  <div class="line"><span>Φόρος κύριου μισθού</span><b><span id="taxAmt">0,00</span> €</b></div>
+
+  <div class="total total-red">
+    <span>ΣΥΝΟΛΟ ΚΡΑΤΗΣΕΩΝ</span>
+    <b><span id="dedTotal">0,00</span> €</b>
+  </div>
+  <div class="total total-blue">
+    <span>ΠΛΗΡΩΤΕΟ ΠΟΣΟ</span>
+    <b><span id="netTotal">0,00</span> €</b>
+  </div>
+</section>
 
     </div>
-    <div id="calGrid" style="margin-top:14px; border:2px solid #111827; border-radius:14px; overflow:hidden;"></div>
-    <div class="rows" style="margin-top:14px;">
-      <div class="row"><div class="l">Νυχτερινά (για μισθολόγιο)</div><div class="r" id="calNights">0</div></div>
-      <div class="row"><div class="l">Πενθήμερα 5Μ (για μισθολόγιο)</div><div class="r" id="calFives">0</div></div>
-    </div>
-    <!-- Cycle copy section: dark panel (so it doesn't look like a big white block under the calendar) -->
-    <div class="card cycleCard" style="margin-top:14px; border:2px solid #111827;">
-      <div style="font-weight:1000;">Αντιγραφή κύκλου 5 ή 10 ημερών</div>
-      <div style="margin-top:8px; line-height:1.5; font-weight:800;">
-        1) Συμπλήρωσε πρώτα τις <b>5</b> ή <b>10</b> πρώτες συνεχόμενες ημέρες (από την έναρξη).<br>
-        2) Διάλεξε μήκος κύκλου και μήνες προς γέμισμα.<br>
-        3) Πάτα <b>Γέμισε</b>. (Δεν αλλάζει ημέρες που ήδη έχουν βάρδια)
+
+    <section class="panel panel-cal">
+      <h2>Ημερολόγιο Βαρδιών</h2>
+
+      <div class="toolbar">
+        <button id="prevMonth" class="navBtn" type="button">◀</button>
+        <div id="calTitle" class="calTitle">—</div>
+        <button id="nextMonth" class="navBtn" type="button">▶</button>
       </div>
-      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
-        <label style="flex:1; min-width:180px; font-weight:900;">
-          Έναρξη κύκλου
-          <input id="cycleStart" type="date" style="width:100%; margin-top:6px;"/>
-        </label>
-        <label style="flex:1; min-width:160px; font-weight:900;">
-          Μήκος κύκλου
-          <span class="infoTip" style="margin-left:6px;">ⓘ
-            <span class="infoBox">
-              5ήμερο μετράει κάθε υπηρεσία Σάββατο ή Κυριακή.
-              Αν υπάρχει υπηρεσία και στις δύο ημέρες, μετράνε 2.
-            </span>
-          </span>
-          <select id="cycleLength" style="width:100%; margin-top:6px;">
-            <option value="5" selected>5 ημέρες</option>
-            <option value="10">10 ημέρες</option>
-          </select>
-        </label>
-        <label style="flex:1; min-width:160px; font-weight:900;">
-          Μήνες προς γέμισμα
-          <select id="cycleMonths" style="width:100%; margin-top:6px;">
-            <option value="1">1 μήνα</option>
-            <option value="3">3 μήνες</option>
-            <option value="6">6 μήνες</option>
-            <option value="12">12 μήνες</option>
-          </select>
-        </label>
-        <button id="fillCycle" class="tabBtn" type="button" style="align-self:end; padding:10px 14px; min-width:140px;">Γέμισε</button>
+
+      <div class="shiftRow">
+        <button class="shiftBtn active" data-shift="P" type="button"><span class="badge bP">ΠΡ</span></button>
+        <button class="shiftBtn" data-shift="A" type="button"><span class="badge bA">ΑΠ</span></button>
+        <button class="shiftBtn" data-shift="N" type="button"><span class="badge bN">ΝΥ</span></button>
+        <button class="shiftBtn" data-shift="AD" type="button"><span class="badge bAD">ΑΔ</span></button>
+        <button class="shiftBtn" data-shift="R" type="button"><span class="badge bR">Ρ</span></button>
       </div>
-    </div>
-    <div style="display:flex; gap:10px; margin-top:12px; flex-wrap:wrap;">
-      <button id="applyToCalc" class="tabBtn tabActive" type="button" style="flex:1;">Εφαρμογή στο Μισθολόγιο</button>
-      <button id="clearMonth" class="tabBtn" type="button" style="flex:1;">Καθαρισμός Μήνα</button>
-    </div>
-    <div class="card" style="margin-top:14px; border:2px solid #000; background:#f3f4f6;">
-      <div style="font-weight:1000;">Οδηγίες 5Μ / Νυχτερινών</div>
-      <div style="margin-top:8px; line-height:1.5; font-weight:700;">
-        • Το 5Μ πληρώνεται 46€.<br>
-        • Παρασκευή ΝΥ μετράει ως 5Μ (όχι νυχτερινό).<br>
-        • Σάββατο ΝΥ μετράει ως 5Μ (όχι νυχτερινό).<br>
-        • Σ/Κ με υπηρεσία μετράει 5Μ.<br>
+
+      <div class="copyRow">
+        <label>Κύκλος</label>
+        <select id="cycleLen">
+          <option value="5" selected>5 ημερών</option>
+          <option value="10">10 ημερών</option>
+        </select>
+        <label>Αντιγραφή σε</label>
+        <select id="copyRange">
+          <option value="1" selected>Μήνα</option>
+          <option value="3">3 μήνες</option>
+          <option value="6">6 μήνες</option>
+          <option value="12">Έτος</option>
+        </select>
+        <button id="copyBtn" type="button">Αντιγραφή κύκλου</button>
+        <button id="clearMonthBtn" type="button">Σβήσιμο μήνα</button>
       </div>
-    </div>
+
+      <div class="weekdays">
+        <div>Δε</div><div>Τρ</div><div>Τε</div><div>Πε</div><div>Πα</div><div>Σα</div><div>Κυ</div>
+      </div>
+      <div id="calGrid" class="calGrid"></div>
+
+      <div class="smallInfo">
+        Νυχτερινά (Δευ–Πεμ): <b id="sumNights">0</b> &nbsp; • &nbsp;
+        Πενθήμερα: <b id="sumFivedays">0</b>
+      </div>
+    </section>
+
+
+    <section class="panel panel-slip" id="printSlip">
+      <h2>Εκκαθαριστικό</h2>
+
+      <div class="slipBlock">
+        <div class="slipHead">Αποδοχές</div>
+        <div class="line"><span>Βασικός μισθός</span><b><span id="slipBase">0,00</span> €</b></div>
+        <div class="line"><span>Επίδομα ιδιαίτερων καθηκόντων</span><b><span id="slipDuty">0,00</span> €</b></div>
+        <div class="line"><span>Επίδομα τέκνων</span><b><span id="slipChild">0,00</span> €</b></div>
+        <div class="line"><span>Παραμεθόριος</span><b><span id="slipBorder">0,00</span> €</b></div>
+        <div class="line"><span>Προσωπική διαφορά</span><b><span id="slipPersonal">0,00</span> €</b></div>
+        <div class="total total-green">
+          <span>ΣΥΝΟΛΟ ΑΠΟΔΟΧΩΝ</span>
+          <b><span id="slipGross">0,00</span> €</b>
+        </div>
+      </div>
+
+      <div class="slipBlock">
+        <div class="slipHead">Κρατήσεις - Φορολογία</div>
+        <div class="line"><span>ΤΠΔΥ</span><b><span id="slipTpdy">0,00</span> €</b></div>
+        <div class="line"><span>ΜΤΠΥ</span><b><span id="slipMtpy">0,00</span> €</b></div>
+        <div class="line"><span>ΤΕΑΔΥ</span><b><span id="slipTeady">0,00</span> €</b></div>
+        <div class="line"><span>Υγειονομική</span><b><span id="slipHealth">0,00</span> €</b></div>
+        <div class="line"><span>ΕΦΚΑ σύνταξη</span><b><span id="slipEfka">0,00</span> €</b></div>
+        <div class="line"><span>Ανεργία</span><b><span id="slipUnemp">0,00</span> €</b></div>
+        <div class="line"><span>Αναγνώριση 5ετίας</span><b><span id="slipFiveYears">0,00</span> €</b></div>
+        <div class="line"><span>Λοιπές κρατήσεις</span><b><span id="slipOther">0,00</span> €</b></div>
+        <div class="line"><span>Φόρος κύριου μισθού</span><b><span id="slipTax">0,00</span> €</b></div>
+        <div class="total total-red">
+          <span>ΣΥΝΟΛΟ ΚΡΑΤΗΣΕΩΝ</span>
+          <b><span id="slipDed">0,00</span> €</b>
+        </div>
+      </div>
+
+      <div class="slipBlock">
+        <div class="slipHead">Νύχτες - 5μερα με κρατήσεις</div>
+        <div class="line"><span>Νυχτερινά μικτά</span><b><span id="slipNightGross">0,00</span> €</b></div>
+        <div class="line"><span>Κρατήσεις νυχτερινών</span><b><span id="slipNightDedTax">0,00</span> €</b></div>
+        <div class="line"><span>Καθαρά νυχτερινά</span><b><span id="slipNightNet">0,00</span> €</b></div>
+        <div class="line"><span>5μερα μικτά</span><b><span id="slipFiveGross">0,00</span> €</b></div>
+        <div class="line"><span>Κρατήσεις 5μέρων</span><b><span id="slipFiveDedTax">0,00</span> €</b></div>
+        <div class="line"><span>Καθαρά 5μερα</span><b><span id="slipFiveNet">0,00</span> €</b></div>
+        <div class="total total-green">
+          <span>ΚΑΘΑΡΟ ΝΥΧΤΕΣ - 5ΜΕΡΑ</span>
+          <b><span id="slipExtrasNet">0,00</span> €</b>
+        </div>
+      </div>
+
+      <div class="total total-blue slipFinal">
+        <span>ΠΛΗΡΩΤΕΟ ΠΟΣΟ</span>
+        <b><span id="slipNet">0,00</span> €</b>
+      </div>
+    </section>
+
+
+    <footer class="footer">
+      <div>Κατασκευή Κερμανίδης Μερκούριος — <a href="mailto:merkos1969@gmail.com">merkos1969@gmail.com</a></div>
+      <div style="margin-top:6px"><a href="./eidiko_misthologio_kat_g.xlsx" download>Excel – Ειδικό μισθολόγιο (ΚΑΤ Γ')</a></div>
+    </footer>
   </div>
-</div>
-<script src="app.js?v=94calbg"></script>
+
+  <script src="./data.js?v=38"></script>
+  <script src="./app.js?v=38"></script>
 </body>
 </html>
